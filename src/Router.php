@@ -7,7 +7,7 @@ require_once 'model/UserStorage.php';
 
 class Router{
 
-    private $rep = "/dmWeb/magic.php";
+    private $rep = "/Magic/dmWeb/magic.php";
 
 	public function main($storage){
         session_start();
