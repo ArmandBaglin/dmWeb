@@ -16,6 +16,7 @@ class View {
      // Permet de gérer les fichiers css 
     function initHeader(){
         echo '<head>';
+        echo '<meta charset="utf-8" />';
         echo '<link href="'.$this->router->getCssURL("css/app.css").'" rel="stylesheet"/>';
         echo '</head>';
     }

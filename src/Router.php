@@ -2,8 +2,11 @@
 
 require_once 'view/View.php';
 require_once 'view/UserView.php';
+require_once 'view/CardView.php';
 require_once 'controller/UserController.php';
+require_once 'controller/CardController.php';
 require_once 'model/UserStorage.php';
+require_once 'model/CardStorage.php';
 
 class Router{
 
@@ -14,9 +17,11 @@ class Router{
 
         // Initialisation des vues
         $userView = new UserView($this);
+        $cardView = new CardView($this);
 
         // Initialisation des controleurs 
         $userController = new UserController($userView,new UserStorage($storage));
+        $cardController = new CardController($cardView,new CardStorage($storage));
 
         /*
         *   Vue globale, en fonction de ce qui est demandé par l'utilisateur, elle sera initialisée avec une vue plus spécialisée
@@ -54,6 +59,24 @@ class Router{
                         $mainView = $userView;
                                 break;
 
+                    case 'newCard' :
+                        if(isAuthorized(1)){
+                            $cardController->CreateCard($_POST);
+                            $mainView = $cardView;
+                        }else{
+                            $mainView->makeUnauthorizedPage();
+                        }
+                                break;
+                                
+                    case 'extensions' : 
+                        if(isset($path[2])){
+                            $cardController->showExtension(replaceUnderscoreBySpace($path[2]));
+                            $mainView = $cardView;
+                        }else{
+                            $cardController->showExtensionList();
+                            $mainView = $cardView;
+                        }
+                        break;
                     default :
                              $mainView->makeHomePage();
                             break;
@@ -67,7 +90,7 @@ class Router{
         }
             
         $mainView->initHeader();
-       echo $mainView->render();
+        echo $mainView->render();
     }
     
     function getUserCreationURL(){
@@ -86,6 +109,14 @@ class Router{
 
     function getCssURL($file){
         return $this->rep.'/../src/'.$file;
+    }
+
+    function getCardCreationURL(){
+        return $this->rep.'/newCard';
+    }
+
+    function getExtensionURL($extension){
+        return $this->rep.'/extensions/'.$extension;
     }
 
 }
