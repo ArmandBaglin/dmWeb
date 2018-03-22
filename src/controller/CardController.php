@@ -45,4 +45,14 @@ class CardController{
             $this->view->makeExtensionPage($extension,$cards);
         }
     }
+
+    function showAllCards($data){
+        if(key_exists('extension',$data)){
+            $this->view->makeExtensionForm($this->storage->readAllExtension());
+            $cards = $this->storage->readCardsByExtension($data['extension']);
+            $this->view->makeTableWithCards($cards);
+        }else{
+            $this->view->makeExtensionForm($this->storage->readAllExtension());
+        }
+    }
 }

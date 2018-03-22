@@ -74,6 +74,21 @@ class CardStorage{
         return $query->fetchAll();
     }
 
+    function readCardColors($cardID){
+        $query = $this->db->prepare("SELECT  * from card_color
+                                    join color on card_color.card_color_color  = color.color_id 
+                                    where card_color_card = :id");
+        $query->execute(array(
+            'id' => $cardID,
+        ));
+        $return = array();
+        foreach ($query->fetchAll() as $key => $value) {
+            # code...
+            array_push($return,array("color" => $value['color_name'],"cost" =>$value['card_color_color']));
+        }
+        return $return;
+    }
+
     function delete($card){
         $query = $this->db->prepare("delete from card where id = :id");
         $a = $query->execute(array(
@@ -120,11 +135,18 @@ class CardStorage{
     }
 
     function readCardsByExtension($ExtensionID){
-        $query = $this->db->prepare("SELECT * FROM card where card_extension like :id");
+        $query = $this->db->prepare("SELECT * FROM card 
+                                    where card_extension = :id");
         $res = $query->execute(array(
             "id" => $ExtensionID,
         ));
-
-        return $query->fetchAll();
+        $cards = array();
+        $colors = array();
+        foreach ($query->fetchAll() as $key => $card) {
+            # code...
+            array_push($cards, new Card($card['card_id'],$card['card_name'],$card['card_rarity'],$card['card_extension'],$card['card_type']));
+            array_push($colors,$this->readCardColors($card['card_id']));
+        }
+        return array($cards,$colors);
     }
 }

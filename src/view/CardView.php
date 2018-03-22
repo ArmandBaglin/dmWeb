@@ -58,4 +58,74 @@ class CardView extends View{
         var_dump($extension);
         var_dump($cards);
     }
+
+    function makeExtensionForm($list){
+        $this->content .= '<form action='.$this->router->getCardsURL().' method="POST">';
+        $this->content .= '<select name="extension">';
+        foreach ($list as $key => $value) {
+            # code...
+            $this->content .= '<option value='.$value['extension_id'].'>'.$value['extension_name'].'</option>';
+        }
+        $this->content .= '</select>';
+        $this->content .= '<input type="submit" value="Chercher" />';
+        $this->content .= '</form>';
+    }
+
+    function makeTableWithCards($cards){
+        $this->content .= '<table>';
+        $this->content .= '<tr>';
+        $this->content .= '<th> Nom </th>';
+        $this->content .= '<th> Mana </th>';
+        $this->content .= '<th> Type </th>';
+        $this->content .= '<th> Rareté </th>';
+        $this->content .= '</tr>';
+        $c = $cards[0];
+        $colors = $cards[1];
+        foreach ($c as $key => $card) {
+            # code...
+            $this->content .= '<tr>';
+            $this->content .= '<td>'.$card->getName().'</td>';
+            $this->content .= '<td>';
+            foreach ($colors[$key] as $key => $value) {
+                # code...
+                $this->content .= $value['cost'].' '.$this->getColorImage($value['color']);
+            }  
+            $this->content .= '</td>';        
+            $this->content .= '<td>'.$card->getType().'</td>';
+            $this->content .= '<td>'.$card->getRarity().'</td>';
+            $this->content .= '</tr>';
+        }
+    }
+
+    function getColorImage($colorName){
+        switch ($colorName) {
+            case 'BLANC':
+                
+                return '<img src='.$this->router->getImage('blanc.svg').'/>';
+                break;
+            case 'ROUGE':
+                return '<img src='.$this->router->getImage('rouge.svg').'/>';
+                break;
+
+            case 'NOIR':
+                return '<img src='.$this->router->getImage('noir.svg').'/>';
+                break;    
+
+            case 'BLEU':
+                return '<img src='.$this->router->getImage('bleu.svg').'/>';
+                break; 
+
+            case 'INCOLORE':
+                return '<img src='.$this->router->getImage('incolore.svg').'/>';
+                break; 
+
+            case 'VERT':
+                return '<img src='.$this->router->getImage('vert.svg').'/>';
+                break; 
+            
+            default:
+                # code...
+                break;
+        }
+    }
 }

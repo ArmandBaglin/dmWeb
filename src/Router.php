@@ -5,8 +5,10 @@ require_once 'view/UserView.php';
 require_once 'view/CardView.php';
 require_once 'controller/UserController.php';
 require_once 'controller/CardController.php';
+require_once 'controller/CollectionController.php';
 require_once 'model/UserStorage.php';
 require_once 'model/CardStorage.php';
+require_once 'model/CollectionStorage.php';
 
 class Router{
 
@@ -22,6 +24,7 @@ class Router{
         // Initialisation des controleurs 
         $userController = new UserController($userView,new UserStorage($storage));
         $cardController = new CardController($cardView,new CardStorage($storage));
+        $collectionController = new CollectionController($cardView, new CollectionStorage($storage));
 
         /*
         *   Vue globale, en fonction de ce qui est demandé par l'utilisateur, elle sera initialisée avec une vue plus spécialisée
@@ -77,8 +80,21 @@ class Router{
                             $mainView = $cardView;
                         }
                         break;
+
+                    case 'collection' :
+                        if(isLogged()){
+                            $collectionController->showCollection($_SESSION['name']);
+                            $mainView = $cardView;
+                        }else{
+                            $mainView->makeLoginNeededPage($this->getCollectionURL());
+                        }
+                        break;
+                    case 'cards' : 
+                        $cardController->showAllCards($_POST);
+                        $mainView = $cardView;
+                        break;
                     default :
-                             $mainView->makeHomePage();
+                             $mainView->makeInexistentPage();
                             break;
                 }
 
@@ -91,6 +107,13 @@ class Router{
             
         $mainView->initHeader();
         echo $mainView->render();
+    }
+
+    function getCardsURL(){
+        return $this->rep.'/cards';
+    }
+    function getCollectionURL(){
+        return $this->rep.'/collection';
     }
     
     function getUserCreationURL(){
@@ -117,6 +140,10 @@ class Router{
 
     function getExtensionURL($extension){
         return $this->rep.'/extensions/'.$extension;
+    }
+
+    function getImage($name){
+        return $this->rep.'/../src/images/'.$name;
     }
 
 }

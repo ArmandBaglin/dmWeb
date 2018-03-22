@@ -40,4 +40,11 @@ class View {
     function makeInexistentPage(){
         $this->content .= '<p> Page innexistante</p>';
     }
+
+    function makeLoginNeededPage($url){
+        $this->content .= "<p> Vous devez vous connecter pour acceder à cette page : ";
+        $connectView = new UserView($this->router);
+        $connectView->makeLoginPage($url);
+        $this->content = $connectView->render();
+    }
 }
