@@ -42,7 +42,6 @@ class UserController{
                     }else{
                         $_SESSION['name'] = $user->getName();
                         $_SESSION['role'] = $user->getRole();
-                        var_dump($data);
                         if(empty($data['url'])){ 
                             $this->view->makeHomePage();
                         }else{

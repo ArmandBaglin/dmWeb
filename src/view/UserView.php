@@ -36,8 +36,5 @@ class UserView extends View{
         $this->content.=$error;
     }
 
-    function makeLogoutButton(){
-        $this->content .= '<a href="'.$this->router->getLogoutURL().'"><button>Déconnexion</button></a>';
-    }
 
 }

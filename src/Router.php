@@ -105,7 +105,8 @@ class Router{
             echo $e.getMessage();
         }
             
-        $mainView->initHeader();
+        // isLogged Permet de créer un menu différent si l'utilisateur est connecté/déconnecté
+        $mainView->initHeader(isLogged());
         echo $mainView->render();
     }
 
@@ -142,6 +143,9 @@ class Router{
         return $this->rep.'/extensions/'.$extension;
     }
 
+    function getExtensionsURL(){
+        return $this->rep.'/extensions';
+    } 
     function getImage($name){
         return $this->rep.'/../src/images/'.$name;
     }
