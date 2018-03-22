@@ -5,9 +5,6 @@ class CardView extends View{
         parent::__construct($router);
     }
 
-    function render(){
-        return $this->content;
-    }
 
     function makeCardCreationPage($errors,$extension,$rarity,$colors){
         $this->content .= '<form method=POST action='.$this->router->getCardCreationURL().'>';
@@ -72,7 +69,7 @@ class CardView extends View{
     }
 
     function makeTableWithCards($cards){
-        $this->content .= '<table>';
+        $this->content .= '<table id="card_table">';
         $this->content .= '<tr>';
         $this->content .= '<th> Nom </th>';
         $this->content .= '<th> Mana </th>';

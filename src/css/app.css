@@ -23,8 +23,19 @@ body{
 }
 #menuHeader > li > a{
     display: block;
+    text-decoration: none;
 }
 
 #bouttonDeconnexion:hover{
     background-color:red;
+}
+
+#card_table{
+    width:80%;
+}
+
+.content{
+    background-color: snow;
+    margin-left: 3em;
+    margin-right: 3em;
 }

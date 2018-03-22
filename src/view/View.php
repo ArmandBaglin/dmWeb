@@ -10,7 +10,10 @@ class View {
     }
 
     function render(){
-        return $this->content;
+        $content = '<div class="content">';
+        $content.= $this->content;
+        $content .= '</div>';
+        return $content;
     }
 
      // Permet de gérer les fichiers css 

@@ -6,10 +6,6 @@ class UserView extends View{
         parent::__construct($router);
     }
 
-    function render(){
-        return $this->content;
-    }
-
     function makeUserCreationPage($errors = array()){
         $this->content.="<h1>S'inscrire</h1>";
         $this->content.='<form action="'.$this->router->getUserCreationURL().'" method=POST>';
