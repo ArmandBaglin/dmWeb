@@ -81,7 +81,9 @@ class CardView extends View{
         $this->content .= '</tr>';
         $c = $cards[0];
         $colors = $cards[1];
-        $userCards = $cards[2];
+        if($logged){
+            $userCards = $cards[2];
+        }
         foreach ($c as $key => $card) {
             # code...
             $this->content .= '<tr>';
