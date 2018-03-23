@@ -134,6 +134,11 @@ class CardStorage{
 
     }
 
+    /*
+    Permet de récupérer des cartes sous forme d'objet
+    Récupère toutes les cartes d'une extension 
+    ExtensionID correspond à un entier et non le nom de l'extension
+    */
     function readCardsByExtension($ExtensionID){
         $query = $this->db->prepare("SELECT * FROM card 
                                     where card_extension = :id");
@@ -148,5 +153,62 @@ class CardStorage{
             array_push($colors,$this->readCardColors($card['card_id']));
         }
         return array($cards,$colors);
+    }
+
+    /*
+    Permet de récupérer des cartes sous forme d'objet
+    Récupère toutes les cartes d'un utilisateur pour une extension donnée
+    ExtensionID correspond à un entier et non le nom de l'extension
+    */
+    function readUserCardsByExtension($ExtensionID,$userName){
+        $query = $this->db->prepare("SELECT * FROM card
+                                     where card_extension = :id");
+        $res = $query->execute(array(
+            "id" => $ExtensionID,
+        ));     
+        $a = $this->db->prepare("SELECT user_id from users where user_name like :name");
+        $a->execute(array(
+            "name" => $userName,
+        ));
+        $userId = $a->fetch()[0];
+        $cards = array();
+        $colors = array();
+        $userCards = array();
+        foreach ($query->fetchAll() as $key => $card) {
+            # code...
+            array_push($cards, new Card($card['card_id'],$card['card_name'],$card['card_rarity'],$card['card_extension'],$card['card_type']));
+            array_push($colors,$this->readCardColors($card['card_id']));
+            $userCard = $this->db->prepare("SELECT own_amount from own_card
+                                            where own_card = :card and own_user = :user");
+            $userCard->execute(array(
+                "card" => $card['card_id'],
+                "user" => $userId,
+            ));
+            $fetch = $userCard->fetch();
+            if(!$fetch){
+                array_push($userCards,"0");
+            }else{
+                array_push($userCards,$fetch[0]);
+            }
+        }
+        return array($cards,$colors,$userCards);                       
+    }
+
+    /*
+    Fonction qui permet d'ajouter une carte à la collection d'un joueur
+    Le nombre de carte possedé est représenté par amount
+    */
+    function addCardToUser($userName,$card_id,$amount){
+        $a = $this->db->prepare("SELECT user_id from users where user_name like :name");
+        $a->execute(array(
+            "name" => $userName,
+        ));
+        $user_id = $a->fetch()[0];
+        $query = $this->db->prepare("INSERT INTO OWN_CARD(own_user,own_card,own_amount) values (:user,:card,:amount) on duplicate key update own_amount = :amount");
+        $query->execute(array(
+            "user" => $user_id,
+            "card" => $card_id,
+            "amount" => $amount,
+        ));
     }
 }

@@ -68,16 +68,20 @@ class CardView extends View{
         $this->content .= '</form>';
     }
 
-    function makeTableWithCards($cards){
+    function makeTableWithCards($cards,$logged){
         $this->content .= '<table id="card_table">';
         $this->content .= '<tr>';
         $this->content .= '<th> Nom </th>';
         $this->content .= '<th> Mana </th>';
         $this->content .= '<th> Type </th>';
         $this->content .= '<th> Rareté </th>';
+        if($logged){
+            $this->content .= '<th> Quantité </th>';
+        }
         $this->content .= '</tr>';
         $c = $cards[0];
         $colors = $cards[1];
+        $userCards = $cards[2];
         foreach ($c as $key => $card) {
             # code...
             $this->content .= '<tr>';
@@ -90,6 +94,14 @@ class CardView extends View{
             $this->content .= '</td>';        
             $this->content .= '<td>'.$card->getType().'</td>';
             $this->content .= '<td>'.$card->getRarity().'</td>';
+            if($logged){
+                $this->content .= '<td>';
+                $this->content .= '<form method="POST" action='.$this->router->getAddCardURL().'>';
+                $this->content .= '<input type="text" value="'.$userCards[$key].'"name="'.$card->getId().'" />';
+                $this->content .= '<input type="submit" value="add">';
+                $this->content .= '</form>';
+                $this->content .= '</td>';
+            }
             $this->content .= '</tr>';
         }
     }

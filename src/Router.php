@@ -90,8 +90,17 @@ class Router{
                         }
                         break;
                     case 'cards' : 
-                        $cardController->showAllCards($_POST);
+                        $cardController->showAllCards($_POST,isLogged());
                         $mainView = $cardView;
+                        break;
+
+                    case 'addCard' : 
+                    if(isLogged()){
+                        $cardController->addCardToUser($_POST);
+                        $mainView = $cardView;
+                    }else{
+                        $mainView->makeLoginNeededPage($this->getCardsURL());
+                    }
                         break;
                     default :
                              $mainView->makeInexistentPage();
@@ -110,6 +119,9 @@ class Router{
         echo $mainView->render();
     }
 
+    function getAddCardURL(){
+        return $this->rep.'/addCard';
+    }
     function getCardsURL(){
         return $this->rep.'/cards';
     }
