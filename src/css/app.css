@@ -1,11 +1,19 @@
+html { 
+    background: url(../images/background.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+
 body{
-    background-color: wheat;
     margin:0;
 }
 
 #menuHeader{
     padding: 0;
     margin-top:0;
+    margin-bottom:0;
     margin-left: 3em;
     margin-right: 3em;
     background-color: #B1B5AE;
@@ -38,4 +46,40 @@ body{
     background-color: snow;
     margin-left: 3em;
     margin-right: 3em;
+}
+
+#ExtensionList{
+    margin:0;
+    padding:0;
+    display: flex;
+    flex-wrap: wrap;
+}
+#ExtensionList > li{
+    flex-grow: 1;
+    list-style: none;
+    padding:0;
+    width:30%;
+}
+
+
+#ExtensionList > li:nth-child(even){
+    background-color: snow;
+}
+
+#ExtensionList > li:nth-child(odd){
+    background-color: rgb(196, 196, 196);
+}
+
+#ExtensionList > li:hover{
+    background-color: grey;
+}
+#ExtensionList > li >a{
+    font-size:2.3em;
+    text-align:center;
+    padding:.3em;
+    display: inline-block;
+    width:100%;
+    text-decoration: none;
+    font-family:Garamond, serif;
+    color:black;
 }

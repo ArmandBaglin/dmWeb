@@ -1,0 +1,9 @@
+lien des images :
+
+background : https://www.flickr.com/photos/mikecogh/15225553495
+noir : https://mtg.gamepedia.com/File:B.svg
+blanc : https://mtg.gamepedia.com/File:W.svg
+rouge : https://mtg.gamepedia.com/File:R.svg
+bleu : https://mtg.gamepedia.com/File:U.svg
+vert : https://mtg.gamepedia.com/File:G.svg
+incolore : https://mtg.gamepedia.com/File:C.svg
