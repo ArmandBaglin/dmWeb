@@ -28,13 +28,11 @@ class View {
         if($logged){
             echo '<li><a href="'.$this->router->getHomeURL().'"> Accueil </a></li>';
             echo '<li><a href="'.$this->router->getCardsURL().'"> Cartes </a></li>';
-            echo '<li><a href="'.$this->router->getExtensionsURL().'"> Extensions</a></li>';
             echo '<li><a href="'.$this->router->getCollectionURL().'"> Mes Cartes </a></li>';
             echo '<li id="bouttonDeconnexion"><a href="'.$this->router->getLogoutURL().'" >Déconnexion</a></li>';
         }else{
             echo '<li><a href="'.$this->router->getHomeURL().'"> Accueil </a></li>';
             echo '<li><a href="'.$this->router->getCardsURL().'"> Cartes </a></li>';
-            echo '<li><a href="'.$this->router->getExtensionsURL().'"> Extensions</a></li>';
             echo '<li><a href="'.$this->router->getLoginURL().'"> Connexion</a></li>';
         }
         echo '</ul>';

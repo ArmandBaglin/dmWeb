@@ -211,4 +211,18 @@ class CardStorage{
             "amount" => $amount,
         ));
     }
+
+    /* Permet de récupérer l'ID d'une extension gràce à son nom */
+    function getExtensionIDByName($name){
+        $a = $this->db->prepare("SELECT extension_id from extension where extension_name like :name");
+        $a->execute(array(
+            "name" => $name,
+        ));
+        $id = $a->fetch();
+        if($id){
+            return $id[0];
+        }else{
+            return false;
+        }
+    }
 }

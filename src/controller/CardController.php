@@ -36,28 +36,21 @@ class CardController{
         $this->view->makeExtensionList($extensions);
     }
 
-    function showExtension($extensionName){
-        $extension = $this->storage->readExtension($extensionName);
-        if(!$extension){
+    function showAllCards($extension ,$logged = null){
+
+        $extensionID = $this->storage->getExtensionIDByName(replaceUnderscoreBySpace($extension));
+        if(!$extensionID){
             $this->showExtensionList();
         }else{
-            $cards = $this->storage->readCardsByExtension($extension['extension_id']);
-            $this->view->makeExtensionPage($extension,$cards);
-        }
-    }
-
-    function showAllCards($data = array() ,$logged = null){
-        if(key_exists('extension',$data)){
             if($logged){
-                $cards = $this->storage->readUserCardsByExtension($data['extension'],$_SESSION['name']);
+                $cards = $this->storage->readUserCardsByExtension($extensionID,$_SESSION['name']);
             }else{
                 $cards = $this->storage->readCardsByExtension($data['extension']);
             }
             $this->view->makeExtensionForm($this->storage->readAllExtension());
             $this->view->makeTableWithCards($cards,$logged);
-        }else{
-            $this->view->makeExtensionForm($this->storage->readAllExtension());
         }
+
     }
 
     function addCardToUser($data){

@@ -46,22 +46,18 @@ class CardView extends View{
         $this->content.= '<ul>';
         foreach ($extensions as $key => $value) {
             # code...
-            $this->content.= '<li> <a href="'.$this->router->getExtensionURL(replaceSpaceByUnderscore($value['extension_name'])).'">'.$value['extension_name'].'</a></li>';
+            $this->content.= '<li> <a href="'.$this->router->getCardsURL().'/'.replaceSpaceByUnderscore($value['extension_name']).'">'.$value['extension_name'].'</a></li>';
         }
         $this->content.= '</ul>';
     }
 
-    function makeExtensionPage($extension,$cards){
-        var_dump($extension);
-        var_dump($cards);
-    }
 
     function makeExtensionForm($list){
         $this->content .= '<form action='.$this->router->getCardsURL().' method="POST">';
         $this->content .= '<select name="extension">';
         foreach ($list as $key => $value) {
             # code...
-            $this->content .= '<option value='.$value['extension_id'].'>'.$value['extension_name'].'</option>';
+            $this->content .= '<option value="'.$value['extension_name'].'">'.$value['extension_name'].'</option>';
         }
         $this->content .= '</select>';
         $this->content .= '<input type="submit" value="Chercher" />';

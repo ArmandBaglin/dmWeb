@@ -71,15 +71,6 @@ class Router{
                         }
                                 break;
                                 
-                    case 'extensions' : 
-                        if(isset($path[2])){
-                            $cardController->showExtension(replaceUnderscoreBySpace($path[2]));
-                            $mainView = $cardView;
-                        }else{
-                            $cardController->showExtensionList();
-                            $mainView = $cardView;
-                        }
-                        break;
 
                     case 'collection' :
                         if(isLogged()){
@@ -90,7 +81,14 @@ class Router{
                         }
                         break;
                     case 'cards' : 
-                        $cardController->showAllCards($_POST,isLogged());
+                        if(key_exists('extension',$_POST)){
+                            header('Location:./cards/'.replaceSpaceByUnderScore($_POST['extension']));
+                        }
+                        if(isset($path[2])){
+                            $cardController->showAllCards($path[2],isLogged());
+                        }else{
+                            $cardController->showExtensionList();
+                        }
                         $mainView = $cardView;
                         break;
 
@@ -151,13 +149,6 @@ class Router{
         return $this->rep.'/newCard';
     }
 
-    function getExtensionURL($extension){
-        return $this->rep.'/extensions/'.$extension;
-    }
-
-    function getExtensionsURL(){
-        return $this->rep.'/extensions';
-    } 
     function getImage($name){
         return $this->rep.'/../src/images/'.$name;
     }
