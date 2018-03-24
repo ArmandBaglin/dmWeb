@@ -30,6 +30,7 @@ class UserView extends View{
         $this->content.='<input type="submit" value="Se connecter"/>';
         $this->content.='</form>';
         $this->content.=$error;
+        $this->content .= '<a href="'.$this->router->getUserCreationURL().'">Créer un compte</a>';
     }
 
 

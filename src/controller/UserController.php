@@ -16,7 +16,7 @@ class UserController{
         if($builder->isValid()){
             $user = new User($data['name'],password_hash($data['password'],PASSWORD_BCRYPT),2);
             $this->storage->create($user);
-            $this->view->makeLoginPage();
+            $this->view->makeLoginPage(null);
         }else{
             // Remet le formulaire avec les erreurs 
             $this->view->makeUserCreationPage($builder->getErrors());

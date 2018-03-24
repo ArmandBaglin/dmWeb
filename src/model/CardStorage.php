@@ -176,7 +176,7 @@ class CardStorage{
         foreach ($query->fetchAll() as $key => $card) {
             # code...
             $extension = $this->getExtensionName($card['card_extension']);
-            $rarity = $this->getRarityName($card['rarity']);
+            $rarity = $this->getRarityName($card['card_rarity']);
             array_push($cards, new Card($card['card_id'],$card['card_name'],$rarity,$extension,$card['card_type']));
             array_push($colors,$this->readCardColors($card['card_id']));
         }

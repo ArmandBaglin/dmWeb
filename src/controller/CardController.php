@@ -44,7 +44,7 @@ class CardController{
             if($logged){
                 $cards = $this->storage->readUserCardsByExtension($extensionID,$_SESSION['name']);
             }else{
-                $cards = $this->storage->readCardsByExtension($data['extension']);
+                $cards = $this->storage->readCardsByExtension($extensionID);
             }
             $this->view->makeExtensionForm($this->storage->readAllExtension(),replaceUnderscoreBySpace($extension));
             $this->view->makeTableWithCards($cards,$logged,ucwords(strtolower(replaceUnderscoreBySpace($extension))));
