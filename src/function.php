@@ -22,3 +22,15 @@ function isAuthorized($role){
     }
     return true;
 }
+
+function replaceSpaceByUnderscore($str){
+    $tab = explode(' ',$str);
+    $str = implode($tab,"_");
+    return $str;
+}
+
+function replaceUnderscoreBySpace($str){
+    $tab = explode('_',$str);
+    $str = implode($tab," ");
+    return $str;
+}

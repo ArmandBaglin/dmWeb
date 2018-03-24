@@ -2,8 +2,13 @@
 
 require_once 'view/View.php';
 require_once 'view/UserView.php';
+require_once 'view/CardView.php';
 require_once 'controller/UserController.php';
+require_once 'controller/CardController.php';
+require_once 'controller/CollectionController.php';
 require_once 'model/UserStorage.php';
+require_once 'model/CardStorage.php';
+require_once 'model/CollectionStorage.php';
 
 class Router{
 
@@ -14,9 +19,12 @@ class Router{
 
         // Initialisation des vues
         $userView = new UserView($this);
+        $cardView = new CardView($this);
 
         // Initialisation des controleurs 
         $userController = new UserController($userView,new UserStorage($storage));
+        $cardController = new CardController($cardView,new CardStorage($storage));
+        $collectionController = new CollectionController($cardView, new CollectionStorage($storage));
 
         /*
         *   Vue globale, en fonction de ce qui est demandé par l'utilisateur, elle sera initialisée avec une vue plus spécialisée
@@ -54,8 +62,46 @@ class Router{
                         $mainView = $userView;
                                 break;
 
+                    case 'newCard' :
+                        if(isAuthorized(1)){
+                            $cardController->CreateCard($_POST);
+                            $mainView = $cardView;
+                        }else{
+                            $mainView->makeUnauthorizedPage();
+                        }
+                                break;
+                                
+
+                    case 'collection' :
+                        if(isLogged()){
+                            $collectionController->showCollection($_SESSION['name']);
+                            $mainView = $cardView;
+                        }else{
+                            $mainView->makeLoginNeededPage($this->getCollectionURL());
+                        }
+                        break;
+                    case 'cards' : 
+                        if(key_exists('extension',$_POST)){
+                            header('Location:./cards/'.replaceSpaceByUnderScore($_POST['extension']));
+                        }
+                        if(isset($path[2])){
+                            $cardController->showAllCards($path[2],isLogged());
+                        }else{
+                            $cardController->showExtensionList();
+                        }
+                        $mainView = $cardView;
+                        break;
+
+                    case 'addCard' : 
+                    if(isLogged()){
+                        $cardController->addCardToUser($_POST);
+                        $mainView = $cardView;
+                    }else{
+                        $mainView->makeLoginNeededPage($this->getCardsURL());
+                    }
+                        break;
                     default :
-                             $mainView->makeHomePage();
+                             $mainView->makeInexistentPage();
                             break;
                 }
 
@@ -66,8 +112,19 @@ class Router{
             echo $e.getMessage();
         }
             
-        $mainView->initHeader();
-       echo $mainView->render();
+        // isLogged Permet de créer un menu différent si l'utilisateur est connecté/déconnecté
+        $mainView->initHeader(isLogged());
+        echo $mainView->render();
+    }
+
+    function getAddCardURL(){
+        return $this->rep.'/addCard';
+    }
+    function getCardsURL(){
+        return $this->rep.'/cards';
+    }
+    function getCollectionURL(){
+        return $this->rep.'/collection';
     }
     
     function getUserCreationURL(){
@@ -86,6 +143,14 @@ class Router{
 
     function getCssURL($file){
         return $this->rep.'/../src/'.$file;
+    }
+
+    function getCardCreationURL(){
+        return $this->rep.'/newCard';
+    }
+
+    function getImage($name){
+        return $this->rep.'/../src/images/'.$name;
     }
 
 }

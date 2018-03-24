@@ -23,29 +23,35 @@ class UserController{
         }
     }
 
-    function login($data){
+    function login($data,$url=''){
         if(key_exists('name',$_SESSION) && key_exists('role',$_SESSION)){
             // Utilisateur déjà connecté redirigé vers page d'accueil
             $this->view->makeHomePage();
         }else{
             if(key_exists('name',$data) && key_exists('password',$data)){
                 // Formulaire de connexion déjà rempli
+
                 $user = $this->storage->read($data['name']);
                 if(!$user){
                     $error = 'Utilisateur inconnu';
-                    $this->view->makeLoginPage($error);
+                    $this->view->makeLoginPage($data['url'],$error);
                 }else{
                     if(!password_verify($data['password'],$user->getPassword())){
                         $error = 'Mauvais mot de passe';
-                        $this->view->makeLoginPage($error);
+                        $this->view->makeLoginPage($data['url'],$error);
                     }else{
                         $_SESSION['name'] = $user->getName();
                         $_SESSION['role'] = $user->getRole();
-                        $this->view->makeHomePage();
+                        if(empty($data['url'])){ 
+                            $this->view->makeHomePage();
+                        }else{
+                            // Permet de renvoyer à l'Url ou l'utilisateur s'est connecté
+                            header('Location:'.$data['url']);
+                        }
                     }
                 }
             }else{
-                $this->view->makeLoginPage();
+                $this->view->makeLoginPage($url);
             }
         }
     }
