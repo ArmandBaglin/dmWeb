@@ -59,6 +59,32 @@ class CardStorage{
         return $card;
     }
 
+    function getExtensionName($id){
+        $query = $this->db->prepare("SELECT  extension_name from extension where extension_id = :id");
+        $query->execute(array(
+            'id' => $id,
+        ));
+        $name = $query->fetch();
+        if($name){
+            return $name[0];
+        }else{
+            return false;
+        }
+    }
+
+    function getRarityName($id){
+        $query = $this->db->prepare("SELECT  rarity_name from rarity where rarity_id = :id");
+        $query->execute(array(
+            'id' => $id,
+        ));
+        $name = $query->fetch();
+        if($name){
+            return $name[0];
+        }else{
+            return false;
+        }
+    }
+
     function readAllExtension(){
         $query = $this->db->query("SELECT  * from extension");
         return $query->fetchAll();
@@ -84,7 +110,7 @@ class CardStorage{
         $return = array();
         foreach ($query->fetchAll() as $key => $value) {
             # code...
-            array_push($return,array("color" => $value['color_name'],"cost" =>$value['card_color_color']));
+            array_push($return,array("color" => $value['color_name'],"cost" =>$value['card_color_cost']));
         }
         return $return;
     }
@@ -149,7 +175,9 @@ class CardStorage{
         $colors = array();
         foreach ($query->fetchAll() as $key => $card) {
             # code...
-            array_push($cards, new Card($card['card_id'],$card['card_name'],$card['card_rarity'],$card['card_extension'],$card['card_type']));
+            $extension = $this->getExtensionName($card['card_extension']);
+            $rarity = $this->getRarityName($card['rarity']);
+            array_push($cards, new Card($card['card_id'],$card['card_name'],$rarity,$extension,$card['card_type']));
             array_push($colors,$this->readCardColors($card['card_id']));
         }
         return array($cards,$colors);
@@ -176,7 +204,9 @@ class CardStorage{
         $userCards = array();
         foreach ($query->fetchAll() as $key => $card) {
             # code...
-            array_push($cards, new Card($card['card_id'],$card['card_name'],$card['card_rarity'],$card['card_extension'],$card['card_type']));
+            $extension = $this->getExtensionName($card['card_extension']);
+            $rarity = $this->getRarityName($card['card_rarity']);
+            array_push($cards, new Card($card['card_id'],$card['card_name'],$rarity,$extension,$card['card_type']));
             array_push($colors,$this->readCardColors($card['card_id']));
             $userCard = $this->db->prepare("SELECT own_amount from own_card
                                             where own_card = :card and own_user = :user");

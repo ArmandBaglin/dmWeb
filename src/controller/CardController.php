@@ -15,7 +15,6 @@ class CardController{
         $builder = new CardBuilder($data,$this->storage);
         if($builder->isValid()){
             //insertion
-            var_dump($data);
             $card = new Card(null,$data['name'],$data['rarity'],$data['extension'],$data['type']);
             $cardId = $this->storage->create($card);
             $colors = $this->storage->readAllColor();
@@ -47,17 +46,25 @@ class CardController{
             }else{
                 $cards = $this->storage->readCardsByExtension($data['extension']);
             }
-            $this->view->makeExtensionForm($this->storage->readAllExtension());
-            $this->view->makeTableWithCards($cards,$logged);
+            $this->view->makeExtensionForm($this->storage->readAllExtension(),replaceUnderscoreBySpace($extension));
+            $this->view->makeTableWithCards($cards,$logged,ucwords(strtolower(replaceUnderscoreBySpace($extension))));
         }
 
     }
 
     function addCardToUser($data){
+        if(key_exists('extension',$data)){
+            $extension = replaceSpaceByUnderscore(strtoupper($data['extension']));
+            unset($data['extension']);
+        }
         foreach ($data as $key => $value) {
             # code...
             $this->storage->addCardToUser($_SESSION['name'],$key,$value);
-            $this->showAllCards();
+        }
+        if(isset($extension)){
+            $this->showAllCards($extension,true);
+        }else{
+            $this->showExtensionList();
         }
     }
 }

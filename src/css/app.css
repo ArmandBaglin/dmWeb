@@ -1,13 +1,15 @@
 html { 
-    background: url(../images/background.jpg) no-repeat center center fixed; 
+    background: url(../images/background.jpg) no-repeat center center fixed;  /* Code récupéré sur CSSTricks*/
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    height:100%;
   }
 
 body{
     margin:0;
+    height:100%;
 }
 
 #menuHeader{
@@ -28,9 +30,13 @@ body{
     font-size: 15px;
     flex-grow: 1;
     text-align: center;
+    width:25%;
 }
 #menuHeader > li > a{
     display: block;
+    font-size: 2em;
+    height: 100%;
+    width:100%;
     text-decoration: none;
 }
 
@@ -38,21 +44,63 @@ body{
     background-color:red;
 }
 
+
+/* Tableau avec liste des cartes */
 #card_table{
-    width:80%;
+    margin-top: 3%;
+    margin-left: 5%;
+    width:90%;
+    border-collapse: collapse;
+    font-family: Garamond, serif;
 }
 
+#card_table td,#card_table th{
+    border: 1px solid;
+}
+
+#card_table th{
+    font-size:1.8em;
+}
+
+#card_table td{
+    font-size:1.3em;
+    text-align: center;
+}
+
+.mana_img{
+    width:1em;
+}
+
+#table_input{
+    width: 3em;
+    text-align: center;
+}
+
+#table_modify_button{
+    margin-left: 2em;
+    background-color: blueviolet;
+    border-radius: 15px;
+    padding:1em;
+}
+
+
+/* Div content, ce qui englobe le contenu sous el header*/
 .content{
+    padding: 1em;
     background-color: snow;
     margin-left: 3em;
     margin-right: 3em;
+    
 }
 
+
+/* Page avec les extensions */
 #ExtensionList{
     margin:0;
     padding:0;
     display: flex;
     flex-wrap: wrap;
+    border: 1px solid rgb(196, 196, 196);
 }
 #ExtensionList > li{
     flex-grow: 1;
@@ -74,7 +122,8 @@ body{
     background-color: grey;
 }
 #ExtensionList > li >a{
-    font-size:2.3em;
+    box-sizing: border-box;
+    font-size:2em;
     text-align:center;
     padding:.3em;
     display: inline-block;

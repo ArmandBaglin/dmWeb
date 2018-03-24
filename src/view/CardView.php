@@ -52,28 +52,37 @@ class CardView extends View{
     }
 
 
-    function makeExtensionForm($list){
+    function makeExtensionForm($list,$currentExtension=''){
         $this->content .= '<form action='.$this->router->getCardsURL().' method="POST">';
         $this->content .= '<select name="extension">';
         foreach ($list as $key => $value) {
             # code...
-            $this->content .= '<option value="'.$value['extension_name'].'">'.$value['extension_name'].'</option>';
+            if($value['extension_name']===$currentExtension){
+                $this->content .= '<option selected value="'.$value['extension_name'].'">'.$value['extension_name'].'</option>';
+            }else{
+                $this->content .= '<option value="'.$value['extension_name'].'">'.$value['extension_name'].'</option>';
+            }
         }
         $this->content .= '</select>';
         $this->content .= '<input type="submit" value="Chercher" />';
         $this->content .= '</form>';
     }
 
-    function makeTableWithCards($cards,$logged){
+    function makeTableWithCards($cards,$logged,$extensionName){
         $this->content .= '<table id="card_table">';
+        $this->content .= '<thead>';
+        $this->content .= '<tr><th colspan="6"> Carte de l\'extension: '.$extensionName.'</th></tr>';
         $this->content .= '<tr>';
+        $this->content .= '<th></th>';
         $this->content .= '<th> Nom </th>';
         $this->content .= '<th> Mana </th>';
         $this->content .= '<th> Type </th>';
         $this->content .= '<th> Rareté </th>';
         if($logged){
-            $this->content .= '<th> Quantité </th>';
+            $this->content .= '<th> Mes Cartes </th>';
         }
+        $this->content .= '</thead>';
+        $this->content .= '<tbody>';
         $this->content .= '</tr>';
         $c = $cards[0];
         $colors = $cards[1];
@@ -83,6 +92,7 @@ class CardView extends View{
         foreach ($c as $key => $card) {
             # code...
             $this->content .= '<tr>';
+            $this->content .= '<th>'. ($key+1) .'</th>';
             $this->content .= '<td>'.$card->getName().'</td>';
             $this->content .= '<td>';
             foreach ($colors[$key] as $key => $value) {
@@ -95,13 +105,26 @@ class CardView extends View{
             if($logged){
                 $this->content .= '<td>';
                 $this->content .= '<form method="POST" action='.$this->router->getAddCardURL().'>';
-                $this->content .= '<input type="text" value="'.$userCards[$key].'" name="'.$card->getId().'" />';
-                $this->content .= '<input type="submit" value="add">';
+                $this->content .= '<input id="table_input" type="text" value="'.$userCards[$key].'" name="'.$card->getId().'" />';
+                $this->content .= '<input type="hidden" name="extension" value="'.$extensionName.'"/>';
+                $this->content .= '<input id="table_modify_button" type="submit" value="modifier">';
                 $this->content .= '</form>';
                 $this->content .= '</td>';
             }
             $this->content .= '</tr>';
         }
+        $this->content .= '</tbody>';
+        $this->content .= '<tfoot>';
+        $this->content .= '<tr>';
+        $this->content .= '<th></th>';
+        $this->content .= '<th> Nom </th>';
+        $this->content .= '<th> Mana </th>';
+        $this->content .= '<th> Type </th>';
+        $this->content .= '<th> Rareté </th>';
+        if($logged){
+            $this->content .= '<th> Mes Cartes </th>';
+        }
+        $this->content .= '</tfoot>';
         $this->content .= '</table>';
     }
 
@@ -109,26 +132,26 @@ class CardView extends View{
         switch ($colorName) {
             case 'BLANC':
                 
-                return '<img alt="blanc" src='.$this->router->getImage('blanc.svg').'/>';
+                return '<img alt="blanc" class="mana_img" src='.$this->router->getImage('blanc.svg').'/>';
                 break;
             case 'ROUGE':
-                return '<img alt="rouge" src='.$this->router->getImage('rouge.svg').'/>';
+                return '<img alt="rouge" class="mana_img" src='.$this->router->getImage('rouge.svg').'/>';
                 break;
 
             case 'NOIR':
-                return '<img alt="noir" src='.$this->router->getImage('noir.svg').'/>';
+                return '<img alt="noir" class="mana_img" src='.$this->router->getImage('noir.svg').'/>';
                 break;    
 
             case 'BLEU':
-                return '<img alt="bleu" src='.$this->router->getImage('bleu.svg').'/>';
+                return '<img alt="bleu" class="mana_img" src='.$this->router->getImage('bleu.svg').'/>';
                 break; 
 
             case 'INCOLORE':
-                return '<img alt="incolore" src='.$this->router->getImage('incolore.svg').'/>';
+                return '<img alt="incolore" class="mana_img" src='.$this->router->getImage('incolore.svg').'/>';
                 break; 
 
             case 'VERT':
-                return '<img alt="vert" src='.$this->router->getImage('vert.svg').'/>';
+                return '<img alt="vert" class="mana_img" src='.$this->router->getImage('vert.svg').'/>';
                 break; 
             
             default:
